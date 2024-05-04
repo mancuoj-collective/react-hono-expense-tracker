@@ -45,3 +45,7 @@ export const expensesRoute = new Hono()
     const deletedExpense = fakeDatabase.splice(index, 1)[0]
     return c.json({ expense: deletedExpense })
   })
+  .get('/total-spent', (c) => {
+    const total = fakeDatabase.reduce((acc, cur) => acc + cur.amount, 0)
+    return c.json({ total })
+  })
