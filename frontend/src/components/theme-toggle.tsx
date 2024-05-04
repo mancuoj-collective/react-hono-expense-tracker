@@ -1,5 +1,5 @@
-import { useDark } from '~/hooks/use-dark'
 import { Button } from '~/components/ui/button'
+import { useDark } from '~/hooks/use-dark'
 
 export function ThemeToggle() {
   const { toggleDark } = useDark()
