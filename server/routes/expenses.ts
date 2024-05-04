@@ -25,8 +25,7 @@ export const expensesRoute = new Hono()
   .post('/', zValidator('json', createExpenseSchema), (c) => {
     const expense = c.req.valid('json')
     fakeDatabase.push({ ...expense, id: fakeDatabase.length + 1 })
-    c.status(201)
-    return c.json({ expense })
+    return c.json({ expense }, 201)
   })
   .get('/:id{[0-9]+}', (c) => {
     const id = Number.parseInt(c.req.param('id'))
