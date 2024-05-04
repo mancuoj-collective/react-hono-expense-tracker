@@ -9,7 +9,8 @@ export const Route = createFileRoute('/')({
 
 async function getTotalSpent() {
   const res = await api.expenses['total-spent'].$get()
-  if (!res.ok) throw new Error('Server error')
+  if (!res.ok)
+    throw new Error('Server error')
 
   const data = await res.json()
   return data
@@ -21,10 +22,11 @@ function Index() {
     queryFn: getTotalSpent,
   })
 
-  if (error) return `An error has occurred: ${error.message}`
+  if (error)
+    return `An error has occurred: ${error.message}`
 
   return (
-    <div className="w-[400px]">
+    <div className="mx-auto max-w-xl">
       <Card>
         <CardHeader>
           <CardTitle>Total Spent</CardTitle>
