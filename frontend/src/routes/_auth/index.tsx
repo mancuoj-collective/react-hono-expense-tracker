@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { api } from '~/utils/api'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_auth/')({
   component: Index,
 })
 

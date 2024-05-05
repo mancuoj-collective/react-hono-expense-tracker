@@ -4,7 +4,7 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { api } from '~/utils/api'
 
-export const Route = createFileRoute('/expenses')({
+export const Route = createFileRoute('/_auth/expenses')({
   component: Expenses,
 })
 
