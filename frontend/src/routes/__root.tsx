@@ -23,6 +23,9 @@ function Navbar() {
           <Link to="/create-expense" className="text-foreground/70 [&.active]:text-foreground">
             Create
           </Link>
+          <Link to="/profile" className="text-foreground/70 [&.active]:text-foreground">
+            Profile
+          </Link>
         </nav>
         <ThemeToggle />
       </div>
