@@ -27,7 +27,7 @@ function CreateExpense() {
   })
 
   return (
-    <div className="p-2">
+    <div>
       <form
         className="mx-auto max-w-xl"
         onSubmit={(e) => {
