@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1715019181953,
+      "tag": "0000_fine_quasar",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1715020039695,
+      "tag": "0001_nasty_squirrel_girl",
+      "breakpoints": true
+    }
+  ]
+}
