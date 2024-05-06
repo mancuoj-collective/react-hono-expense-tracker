@@ -1,6 +1,5 @@
 import { type QueryClient } from '@tanstack/react-query'
 import { Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ThemeToggle } from '~/components/theme-toggle'
 
 interface MyRouterContext {
@@ -38,20 +37,13 @@ function Navbar() {
   )
 }
 
-function Main() {
-  return (
-    <main className="container flex-1">
-      <Outlet />
-    </main>
-  )
-}
-
 function Root() {
   return (
     <div className="flex h-dvh flex-col font-sans antialiased">
       <Navbar />
-      <Main />
-      <TanStackRouterDevtools />
+      <div className="container flex-1">
+        <Outlet />
+      </div>
     </div>
   )
 }
