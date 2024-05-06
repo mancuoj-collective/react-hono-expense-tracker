@@ -19,8 +19,7 @@ function CreateExpense() {
     },
     onSubmit: async ({ value }) => {
       const res = await api.expenses.$post({ json: value })
-      if (!res.ok)
-        throw new Error('Server error')
+      if (!res.ok) throw new Error('Server error')
 
       navigate({ to: '/expenses' })
     },
@@ -48,7 +47,7 @@ function CreateExpense() {
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={e => field.handleChange(e.target.value)}
+                    onChange={(e) => field.handleChange(e.target.value)}
                   />
                   {field.state.meta.touchedErrors ? <em>{field.state.meta.touchedErrors}</em> : null}
                 </>
@@ -69,7 +68,7 @@ function CreateExpense() {
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={e => field.handleChange(Number(e.target.value))}
+                    onChange={(e) => field.handleChange(Number(e.target.value))}
                   />
                   {field.state.meta.touchedErrors ? <em>{field.state.meta.touchedErrors}</em> : null}
                 </>
@@ -78,7 +77,7 @@ function CreateExpense() {
           />
         </div>
         <form.Subscribe
-          selector={state => [state.canSubmit, state.isSubmitting]}
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
             <Button type="submit" disabled={!canSubmit} className="mt-4 w-full">
               {isSubmitting ? 'Creating ...' : 'Create Expense'}
