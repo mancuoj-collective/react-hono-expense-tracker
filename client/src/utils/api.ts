@@ -1,6 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import { hc } from 'hono/client'
 import { ApiType } from '~server/index'
+import { CreateExpense } from '~server/shared'
 
 const client = hc<ApiType>('/')
 
@@ -32,3 +33,11 @@ export const expensesQueryOptions = queryOptions({
   queryFn: getAllExpenses,
   staleTime: 1000 * 60 * 5,
 })
+
+export async function createExpense(value: CreateExpense) {
+  const res = await api.expenses.$post({ json: value })
+  if (!res.ok) throw new Error('Server error')
+
+  const newExpense = await res.json()
+  return newExpense
+}

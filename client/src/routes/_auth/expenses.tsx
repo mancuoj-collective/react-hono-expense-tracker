@@ -11,11 +11,15 @@ export const Route = createFileRoute('/_auth/expenses')({
 
 function Expenses() {
   const { isPending, error, data } = useQuery(expensesQueryOptions)
+  const { data: loadingCreateExpense } = useQuery({
+    queryKey: ['loading-create-expense'],
+  })
 
   if (error) return `An error has occurred: ${error.message}`
 
   return (
     <div className="mx-auto max-w-xl">
+      {JSON.stringify(loadingCreateExpense)}
       <Table>
         <TableCaption>A list of all your expenses.</TableCaption>
         <TableHeader>

@@ -8,7 +8,7 @@ import { Button } from '~/components/ui/button'
 import { Calendar } from '~/components/ui/calendar'
 import { Input } from '~/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { api, expensesQueryOptions } from '~/utils/api'
+import { createExpense, expensesQueryOptions } from '~/utils/api'
 import { cn } from '~/utils/cn'
 import { createExpenseSchema } from '~server/shared'
 
@@ -29,17 +29,21 @@ function CreateExpense() {
     },
     onSubmit: async ({ value }) => {
       const existingExpenses = await queryClient.ensureQueryData(expensesQueryOptions)
-
-      const res = await api.expenses.$post({ json: value })
-      if (!res.ok) throw new Error('Server error')
-
-      const newExpense = await res.json()
-      queryClient.setQueryData(expensesQueryOptions.queryKey, {
-        ...existingExpenses,
-        expenses: [newExpense, ...existingExpenses.expenses],
-      })
-
       navigate({ to: '/expenses' })
+
+      queryClient.setQueryData(['loading-create-expense'], { expense: value })
+
+      try {
+        const newExpense = await createExpense(value)
+        queryClient.setQueryData(expensesQueryOptions.queryKey, {
+          ...existingExpenses,
+          expenses: [newExpense, ...existingExpenses.expenses],
+        })
+      } catch (error) {
+        console.error(error)
+      } finally {
+        queryClient.setQueryData(['loading-create-expense'], {})
+      }
     },
   })
 
