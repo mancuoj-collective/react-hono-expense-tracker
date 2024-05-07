@@ -1,5 +1,6 @@
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { useForm } from '@tanstack/react-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { format } from 'date-fns'
@@ -7,7 +8,7 @@ import { Button } from '~/components/ui/button'
 import { Calendar } from '~/components/ui/calendar'
 import { Input } from '~/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { api } from '~/utils/api'
+import { api, expensesQueryOptions } from '~/utils/api'
 import { cn } from '~/utils/cn'
 import { createExpenseSchema } from '~server/shared'
 
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/_auth/create-expense')({
 
 function CreateExpense() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const form = useForm({
     validatorAdapter: zodValidator,
@@ -26,8 +28,16 @@ function CreateExpense() {
       date: '',
     },
     onSubmit: async ({ value }) => {
+      const existingExpenses = await queryClient.ensureQueryData(expensesQueryOptions)
+
       const res = await api.expenses.$post({ json: value })
       if (!res.ok) throw new Error('Server error')
+
+      const newExpense = await res.json()
+      queryClient.setQueryData(expensesQueryOptions.queryKey, {
+        ...existingExpenses,
+        expenses: [newExpense, ...existingExpenses.expenses],
+      })
 
       navigate({ to: '/expenses' })
     },
