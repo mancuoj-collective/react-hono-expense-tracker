@@ -1,9 +1,11 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-form-adapter'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { api } from '~/utils/api'
+import { createExpenseSchema } from '~server/shared'
 
 export const Route = createFileRoute('/_auth/create-expense')({
   component: CreateExpense,
@@ -13,6 +15,7 @@ function CreateExpense() {
   const navigate = useNavigate()
 
   const form = useForm({
+    validatorAdapter: zodValidator,
     defaultValues: {
       title: '',
       amount: '0',
@@ -28,7 +31,7 @@ function CreateExpense() {
   return (
     <div>
       <form
-        className="mx-auto max-w-xl"
+        className="mx-auto flex max-w-xl flex-col gap-3"
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -38,6 +41,10 @@ function CreateExpense() {
         <div>
           <form.Field
             name="title"
+            validatorAdapter={zodValidator}
+            validators={{
+              onChange: createExpenseSchema.shape.title,
+            }}
             children={(field) => {
               return (
                 <>
@@ -48,8 +55,11 @@ function CreateExpense() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Enter title here"
                   />
-                  {field.state.meta.touchedErrors ? <em>{field.state.meta.touchedErrors}</em> : null}
+                  {field.state.meta.touchedErrors ? (
+                    <div className="mt-1 text-sm text-destructive">{field.state.meta.touchedErrors}</div>
+                  ) : null}
                 </>
               )
             }}
@@ -58,6 +68,10 @@ function CreateExpense() {
         <div>
           <form.Field
             name="amount"
+            validatorAdapter={zodValidator}
+            validators={{
+              onChange: createExpenseSchema.shape.amount,
+            }}
             children={(field) => {
               return (
                 <>
@@ -69,21 +83,26 @@ function CreateExpense() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Enter amount here"
                   />
-                  {field.state.meta.touchedErrors ? <em>{field.state.meta.touchedErrors}</em> : null}
+                  {field.state.meta.touchedErrors ? (
+                    <div className="text-sm text-destructive">{field.state.meta.touchedErrors}</div>
+                  ) : null}
                 </>
               )
             }}
           />
         </div>
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
-            <Button type="submit" disabled={!canSubmit} className="mt-4 w-full">
-              {isSubmitting ? 'Creating ...' : 'Create Expense'}
-            </Button>
-          )}
-        />
+        <div>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => (
+              <Button type="submit" disabled={!canSubmit} className="w-full">
+                {isSubmitting ? 'Creating ...' : 'Create Expense'}
+              </Button>
+            )}
+          />
+        </div>
       </form>
     </div>
   )

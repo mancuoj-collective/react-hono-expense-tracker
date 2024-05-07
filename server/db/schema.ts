@@ -1,4 +1,6 @@
 import { index, numeric, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+import { z } from 'zod'
 
 export const expensesTable = pgTable(
   'expenses',
@@ -15,3 +17,15 @@ export const expensesTable = pgTable(
     }
   },
 )
+
+export const insertExpenseSchema = createInsertSchema(expensesTable, {
+  title: z
+    .string()
+    .min(3, { message: 'Title must be at least 3 characters long' })
+    .max(100, { message: 'Title must be at most 100 characters long' }),
+  amount: z
+    .string()
+    .regex(/^\d+(?:\.\d{1,2})?$/, { message: 'Amount must be a valid number with up to 2 decimal places' }),
+})
+
+export const selectExpenseSchema = createSelectSchema(expensesTable)
