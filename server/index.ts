@@ -12,8 +12,8 @@ app.use(timing())
 
 const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('/', authRoute)
 
-app.use('*', serveStatic({ root: './frontend/dist' }))
-app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
+app.use('*', serveStatic({ root: './client/dist' }))
+app.get('*', serveStatic({ path: './client/dist/index.html' }))
 
 export type ApiType = typeof apiRoutes
 
