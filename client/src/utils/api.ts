@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import { hc } from 'hono/client'
-import type { ApiType } from '~server/app'
+import { ApiType } from '~server/index'
 
 const client = hc<ApiType>('/')
 

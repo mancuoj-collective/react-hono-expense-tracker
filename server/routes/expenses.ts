@@ -14,8 +14,6 @@ const expenseSchema = z.object({
 
 const createExpenseSchema = expenseSchema.omit({ id: true })
 
-type Expense = z.infer<typeof expenseSchema>
-
 export const expensesRoute = new Hono()
   .use(getUser)
   .get('/', async (c) => {
