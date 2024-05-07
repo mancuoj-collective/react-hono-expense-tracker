@@ -4,11 +4,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { format } from 'date-fns'
+import { toast } from 'sonner'
 import { Button } from '~/components/ui/button'
 import { Calendar } from '~/components/ui/calendar'
 import { Input } from '~/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { createExpense, expensesQueryOptions } from '~/utils/api'
+import { createExpense, expensesQueryOptions, loadingCreateQueryOptions } from '~/utils/api'
 import { cn } from '~/utils/cn'
 import { createExpenseSchema } from '~server/shared'
 
@@ -31,18 +32,23 @@ function CreateExpense() {
       const existingExpenses = await queryClient.ensureQueryData(expensesQueryOptions)
       navigate({ to: '/expenses' })
 
-      queryClient.setQueryData(['loading-create-expense'], { expense: value })
-
+      queryClient.setQueryData(loadingCreateQueryOptions.queryKey, { expense: value })
       try {
         const newExpense = await createExpense(value)
         queryClient.setQueryData(expensesQueryOptions.queryKey, {
           ...existingExpenses,
           expenses: [newExpense, ...existingExpenses.expenses],
         })
+        toast('Expense Created', {
+          description: `Successfully created new expense: ${newExpense.title}`,
+        })
       } catch (error) {
         console.error(error)
+        toast.error('Error', {
+          description: 'Failed to create expense. Please try again.',
+        })
       } finally {
-        queryClient.setQueryData(['loading-create-expense'], {})
+        queryClient.setQueryData(loadingCreateQueryOptions.queryKey, {})
       }
     },
   })

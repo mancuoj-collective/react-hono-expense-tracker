@@ -2,6 +2,7 @@ import { HomeIcon } from '@radix-ui/react-icons'
 import { type QueryClient } from '@tanstack/react-query'
 import { Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { ThemeToggle } from '~/components/theme-toggle'
+import { Toaster } from '~/components/ui/sonner'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -42,6 +43,7 @@ function Root() {
       <div className="container flex-1">
         <Outlet />
       </div>
+      <Toaster />
     </div>
   )
 }
