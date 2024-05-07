@@ -1,10 +1,14 @@
+import { CalendarIcon } from '@radix-ui/react-icons'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-form-adapter'
+import { format } from 'date-fns'
 import { Button } from '~/components/ui/button'
+import { Calendar } from '~/components/ui/calendar'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { api } from '~/utils/api'
+import { cn } from '~/utils/cn'
 import { createExpenseSchema } from '~server/shared'
 
 export const Route = createFileRoute('/_auth/create-expense')({
@@ -18,7 +22,8 @@ function CreateExpense() {
     validatorAdapter: zodValidator,
     defaultValues: {
       title: '',
-      amount: '0',
+      amount: '',
+      date: '',
     },
     onSubmit: async ({ value }) => {
       const res = await api.expenses.$post({ json: value })
@@ -48,17 +53,15 @@ function CreateExpense() {
             children={(field) => {
               return (
                 <>
-                  <Label htmlFor={field.name}>Title</Label>
                   <Input
-                    id={field.name}
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Enter title here"
+                    placeholder="Enter title"
                   />
                   {field.state.meta.touchedErrors ? (
-                    <div className="mt-1 text-sm text-destructive">{field.state.meta.touchedErrors}</div>
+                    <div className="text-sm text-destructive">{field.state.meta.touchedErrors}</div>
                   ) : null}
                 </>
               )
@@ -75,16 +78,54 @@ function CreateExpense() {
             children={(field) => {
               return (
                 <>
-                  <Label htmlFor={field.name}>Amount</Label>
                   <Input
                     type="number"
-                    id={field.name}
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Enter amount here"
+                    placeholder="Enter amount"
                   />
+                  {field.state.meta.touchedErrors ? (
+                    <div className="text-sm text-destructive">{field.state.meta.touchedErrors}</div>
+                  ) : null}
+                </>
+              )
+            }}
+          />
+        </div>
+        <div>
+          <form.Field
+            name="date"
+            validatorAdapter={zodValidator}
+            validators={{
+              onChange: createExpenseSchema.shape.date,
+            }}
+            children={(field) => {
+              return (
+                <>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'w-full pl-3 text-left font-normal',
+                          !field.state.value && 'text-muted-foreground',
+                        )}
+                      >
+                        {field.state.value ? format(field.state.value, 'PP') : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto size-4 opacity-60" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={new Date(field.state.value)}
+                        onSelect={(date) => field.handleChange((date || new Date()).toISOString())}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                   {field.state.meta.touchedErrors ? (
                     <div className="text-sm text-destructive">{field.state.meta.touchedErrors}</div>
                   ) : null}

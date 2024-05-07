@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthProfileImport } from './routes/_auth/profile'
@@ -19,11 +18,6 @@ import { Route as AuthExpensesImport } from './routes/_auth/expenses'
 import { Route as AuthCreateExpenseImport } from './routes/_auth/create-expense'
 
 // Create/Update Routes
-
-const AboutRoute = AboutImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthRoute = AuthImport.update({
   id: '/_auth',
@@ -58,10 +52,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/create-expense': {
       preLoaderRoute: typeof AuthCreateExpenseImport
       parentRoute: typeof AuthImport
@@ -84,13 +74,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([
-    AuthCreateExpenseRoute,
-    AuthExpensesRoute,
-    AuthProfileRoute,
-    AuthIndexRoute,
-  ]),
-  AboutRoute,
+  AuthRoute.addChildren([AuthCreateExpenseRoute, AuthExpensesRoute, AuthProfileRoute, AuthIndexRoute]),
 ])
 
 /* prettier-ignore-end */

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { format } from 'date-fns'
 import { Skeleton } from '~/components/ui/skeleton'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { api } from '~/utils/api'
@@ -30,8 +31,8 @@ function Expenses() {
         <TableCaption>A list of all your expenses.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
             <TableHead>Title</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead className="text-right">Amount</TableHead>
           </TableRow>
         </TableHeader>
@@ -39,10 +40,10 @@ function Expenses() {
           {isPending
             ? Array.from({ length: 3 }).map((_, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">
+                  <TableCell>
                     <Skeleton className="h-4" />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-right">
                     <Skeleton className="h-4" />
                   </TableCell>
                   <TableCell className="text-right">
@@ -52,8 +53,8 @@ function Expenses() {
               ))
             : data?.expenses.map((expense) => (
                 <TableRow key={expense.id}>
-                  <TableCell className="font-medium">{expense.id}</TableCell>
                   <TableCell>{expense.title}</TableCell>
+                  <TableCell>{format(expense.date, 'PP')}</TableCell>
                   <TableCell className="text-right">{expense.amount}</TableCell>
                 </TableRow>
               ))}

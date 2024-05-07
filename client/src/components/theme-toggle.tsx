@@ -7,11 +7,11 @@ export function ThemeToggle() {
 
   return (
     <div className="flex items-center">
-      <a href="https://github.com/mancuoj-collective/react-hono-expense-tracker">
-        <Button variant="ghost" size="icon">
+      <Button asChild variant="ghost" size="icon">
+        <a href="https://github.com/mancuoj-collective/react-hono-expense-tracker">
           <GitHubLogoIcon className="size-5" />
-        </Button>
-      </a>
+        </a>
+      </Button>
       <Button variant="ghost" size="icon" onClick={toggleDark}>
         <span
           role="img"
