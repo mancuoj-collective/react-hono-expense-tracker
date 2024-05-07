@@ -40,7 +40,7 @@ function CreateExpense() {
           expenses: [newExpense, ...existingExpenses.expenses],
         })
         toast('Expense Created', {
-          description: `Successfully created new expense: ${newExpense.title}`,
+          description: 'Successfully created new expense',
         })
       } catch (error) {
         console.error(error)
