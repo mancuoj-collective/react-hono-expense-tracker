@@ -74,12 +74,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([
-    AuthCreateExpenseRoute,
-    AuthExpensesRoute,
-    AuthProfileRoute,
-    AuthIndexRoute,
-  ]),
+  AuthRoute.addChildren([AuthCreateExpenseRoute, AuthExpensesRoute, AuthProfileRoute, AuthIndexRoute]),
 ])
 
 /* prettier-ignore-end */
